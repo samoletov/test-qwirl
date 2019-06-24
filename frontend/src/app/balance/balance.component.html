@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 balance">
+      <h1>Balance: {{ balance.balance }}</h1>
+      <button class="btn btn-primary" (click)="adjustBalance()">Adjust</button>
+      <form id="adjust-balance-form" [hidden]="!adjustingBalance" #adjustForm="ngForm">
+        <h3>Adjust balance</h3>
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <input
+            #amount="ngModel" required
+            [(ngModel)]="adjust.amount"
+            type="number"
+            class="form-control"
+            name="amount"
+            aria-describedby="amountHelp"
+            placeholder="Enter number"
+          />
+          <small id="amountHelp" class="form-text text-muted"
+            >Amount will be credited/debited</small
+          >
+          <div [hidden]="amount.valid" class="alert alert-danger">Amount is required</div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="amount.valid && addToBalance()" [disabled]="!amount.valid">Credit</button>
+        <button type="button" class="btn btn-warning" (click)="amount.valid && removeFromBalance()" [disabled]="!amount.valid">Debit</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 container shares">
+      <h1>Your shares</h1>
+      <div class="row">
+        <div class="col-6"><h5>Symbol</h5></div>
+        <div class="col-6"><h5>Amount</h5></div>
+      </div>
+      <div class="row" *ngFor="let share of balance.shares">
+        <div class="col-6">{{ share.symbol }}</div>
+        <div class="col-6">{{ share.amount }}</div>
+      </div>
+    </div>
+  </div>
+</div>

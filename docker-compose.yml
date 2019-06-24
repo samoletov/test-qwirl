@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  nodejs_backend:
+    build:
+      context: ./backend 
+      dockerfile: ./Dockerfile
+    restart: always
+    networks:
+      - app
+    volumes:
+      - sock:/sock
+      - ./backend:/var/www
+    ports:
+      - "3000:3000"
+  nginx_frontend:
+    build:
+      context: docker-compose/nginx-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend/dist/frontend:/var/www:ro
+      - sock:/sock
+    networks:
+      - app
+    restart: always
+volumes:
+  sock:
+
+networks:
+  app:

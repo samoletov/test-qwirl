@@ -1,0 +1,50 @@
+<h1>Order</h1>
+<form #orderForm="ngForm">
+  <div class="form-group">
+    <label for="type">Type</label>
+    <select
+      #type="ngModel" required
+      [(ngModel)]="order.type"
+      class="form-control"
+      name="type"
+    ><option value="buy">Buy</option><option value="sell">Sell</option></select>
+  </div>
+  <div class="form-group">
+    <label for="symbol">Symbol</label>
+    <input
+      #symbol="ngModel" required
+      [(ngModel)]="order.symbol"
+      type="text"
+      class="form-control"
+      name="symbol"
+      aria-describedby="symbolHelp"
+      placeholder="Enter symbol" [class.is-invalid]="searchFailed" [ngbTypeahead]="search" [resultFormatter]="resultFormatSearch"
+      [inputFormatter]="inputFormatSearch" (selectItem)="selectedItem($event)"
+    />
+    <div [hidden]="symbol.valid || !symbol.touched" class="alert alert-danger">Company symbol is required</div>
+    <div *ngIf="searching">searching...</div>
+    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+  </div>
+  <div class="form-group">
+      <label for="symbol">Price</label>
+      <div>
+        <span *ngIf="quoting">quoting...</span>
+        {{ price }} </div>
+      
+  </div>
+  <div class="form-group">
+      <label for="amount">Amount</label>
+      <input
+        #amount="ngModel" required
+        [(ngModel)]="order.amount"
+        type="number"
+        class="form-control"
+        name="amount"
+        aria-describedby="amountHelp"
+        placeholder="Enter number"
+      />
+      <div [hidden]="amount.valid" class="alert alert-danger">Amount is required</div>
+    </div>
+    <button type="button" class="btn btn-primary" [disabled]="posting" (click)="amount.valid && symbol.valid && add()">Add</button>
+</form>
+<div [hidden]="!error" class="alert alert-danger">{{error}}</div>
